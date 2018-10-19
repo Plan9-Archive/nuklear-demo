@@ -1,7 +1,7 @@
 </$objtype/mkfile
 
 CFLAGS=$CFLAGS -p
-TARG=event
+TARG=event thread
 OFILES=calculator.$O overview.$O
 HFILES=fns.h
 
