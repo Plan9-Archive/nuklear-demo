@@ -1,7 +1,6 @@
 #include <u.h>
 #include <libc.h>
 #include <draw.h>
-#include <keyboard.h>
 #include <event.h>
 #include <nuklear.h>
 
@@ -39,33 +38,6 @@ mainmenu(struct nk_context *ctx)
 		nk_menubar_end(ctx);
 	}
 	nk_end(ctx);
-}
-
-static void
-demo(struct nk_context *ctx)
-{
-	if (nk_begin(ctx, "Demo", nk_rect(425, 180, 200, 230),
-		NK_WINDOW_BORDER|NK_WINDOW_MOVABLE|NK_WINDOW_SCALABLE|
-		NK_WINDOW_CLOSABLE|NK_WINDOW_MINIMIZABLE|NK_WINDOW_TITLE))
-	{
-		enum {EASY, HARD};
-		static int op = EASY;
-		static int property = 20;
-		static char text[128];
-
-		nk_layout_row_static(ctx, 30, 80, 1);
-		if (nk_button_label(ctx, "button"))
-			print("button pressed\n");
-		nk_layout_row_dynamic(ctx, 30, 2);
-		if (nk_option_label(ctx, "easy", op == EASY)) op = EASY;
-		if (nk_option_label(ctx, "hard", op == HARD)) op = HARD;
-		nk_layout_row_dynamic(ctx, 25, 1);
-		nk_property_int(ctx, "Compression:", 0, &property, 100, 10, 1);
-        nk_layout_row_dynamic(ctx, 75, 1);
-		nk_edit_string_zero_terminated(ctx, NK_EDIT_BOX, text, sizeof(text)-1, nk_filter_default);
-	}
-	nk_end(ctx);
-	if (nk_window_is_hidden(ctx, "Demo")) exits(nil);
 }
 
 void
