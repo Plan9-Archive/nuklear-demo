@@ -100,12 +100,13 @@ threadmain(int argc, char *argv[])
 	if(!nk_init_default(ctx, &nkfont))
 		sysfatal("nk_init: %r");
 
-	enum { ATIMER, AKBD, AMOUSE, AEND };
+	enum { ATIMER, AKBD, AMOUSE, ARESIZE, AEND };
 	Alt alts[] = {
-	[ATIMER]	{ timer,	&t,			CHANRCV },
-	[AKBD]		{ kbd,		&kbdchk,	CHANRCV },
-	[AMOUSE]	{ mctl->c,	&m,			CHANRCV },
-	[AEND]		{ nil,		nil,		CHANEND },
+	[ATIMER]	{ timer,			&t,			CHANRCV },
+	[AKBD]		{ kbd,				&kbdchk,	CHANRCV },
+	[AMOUSE]	{ mctl->c,			&m,			CHANRCV },
+	[ARESIZE]	{ mctl->resizec,	nil,		CHANRCV },
+	[AEND]		{ nil,				nil,		CHANEND },
 	};
 
 	for(;;){
@@ -121,6 +122,9 @@ threadmain(int argc, char *argv[])
 		case AMOUSE:
 			nk_plan9_handle_mouse(ctx, m, screen->r.min);
 			break;
+		case ARESIZE:
+			if(getwindow(display, Refnone) < 0)
+				sysfatal("getwindow: %r");
 		}
 		nk_input_end(ctx);
 
